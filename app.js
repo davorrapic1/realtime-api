@@ -15,7 +15,7 @@ app.use(helmet());
 
 app.get('/api', (req, res) => {
     res.json({
-        message: 'Response from the Express API',
+        message: 'Response from the Express Rest API',
     });
 });
 
