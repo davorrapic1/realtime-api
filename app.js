@@ -3,6 +3,7 @@ const path = require('path');
 var morgan = require('morgan');
 var cors = require('cors');
 const helmet = require('helmet');
+const middlewares = require('./middlewares/middleware')
 
 const app = express();
 app.use(express.json());
@@ -18,22 +19,8 @@ app.get('/api', (req, res) => {
     });
 });
 
-// 404 not found
-app.use((req, res, next) => {
-    const error = new Error(`Not Found - ${req.originalUrl}`);
-    res.status(404);
-    next(error);
-});
-
-// error handler
-app.use((error, req, res, next) => {
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    res.status(statusCode);
-    res.json({
-        message: error.message,
-        stack: process.env.NODE_ENV === 'production' ? 'Contact your sys admin for more details' : error.stack
-    })
-})
+app.use(middlewares.notFound);
+app.use(middlewares.handleErrors);
 
 
 module.exports = app;
